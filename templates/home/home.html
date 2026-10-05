@@ -1,0 +1,693 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" href="{% static 'css/home.css' %}"> {% endblock %}
+
+{% block content %}
+
+<div class="home">
+<!-- =========================
+     SAUDAÇÃO
+========================== -->
+
+<section class="greeting">
+    <div>
+        <span class="greeting__eyebrow">PAINEL DE TREINO</span>
+
+        <h1>
+            Olá, <span>{{ user.username }}</span>!
+        </h1>
+
+        <p>Vamos manter a consistência.</p>
+    </div>
+
+    <div class="greeting__status">
+        <span class="status-dot"></span>
+        <span>Foco no treino</span>
+    </div>
+</section>
+
+
+<!-- =========================
+     TREINOS
+========================== -->
+
+<section class="section">
+
+    <div class="section__header">
+        <div>
+            <span class="section__eyebrow">ROTINA</span>
+            <h2>Treino</h2>
+        </div>
+
+        <a href="#" class="section__link">
+            Ver todos →
+        </a>
+    </div>
+
+
+    <div class="training-grid">
+
+        <!-- TREINO DE HOJE -->
+
+        {% if today_workout %}
+
+        <article class="training-card training-card--today">
+
+            <div class="training-card__top">
+
+                <span class="badge badge--today">
+                    ● Hoje
+                </span>
+
+                <span class="training-card__date">
+                    {% now "d/m/Y" %}
+                </span>
+
+            </div>
+
+
+            <div class="training-card__content">
+
+                <h3>
+                    {{ today_workout.name }}
+                </h3>
+
+
+                <p class="training-card__muscles">
+
+                    {% for planned_exercise in today_workout.planned_exercises.all %}
+
+                        {{ planned_exercise.exercise.name }}
+
+                        {% if not forloop.last %}
+                            ·
+                        {% endif %}
+
+                    {% empty %}
+
+                        Nenhum exercício cadastrado.
+
+                    {% endfor %}
+
+                </p>
+
+
+                <div class="training-meta">
+
+                    <div class="meta-item">
+
+                        <span class="meta-item__value">
+                            {{ today_workout.planned_exercises.count }}
+                        </span>
+
+                        <span class="meta-item__label">
+                            Exercícios
+                        </span>
+
+                    </div>
+
+
+                    <div class="meta-item">
+
+                        <span class="meta-item__value">
+                            —
+                        </span>
+
+                        <span class="meta-item__label">
+                            Minutos
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="exercise-preview">
+
+                    {% for planned_exercise in today_workout.planned_exercises.all %}
+
+                        <div class="exercise">
+
+                            <span class="exercise__number">
+                                {{ forloop.counter|stringformat:"02d" }}
+                            </span>
+
+
+                            <div>
+
+                                <strong>
+                                    {{ planned_exercise.exercise.name }}
+                                </strong>
+
+
+                                <span>
+
+                                    {% if planned_exercise.target_sets %}
+                                        {{ planned_exercise.target_sets }} ×
+                                    {% endif %}
+
+
+                                    {% if planned_exercise.target_repetitions %}
+                                        {{ planned_exercise.target_repetitions }} reps
+                                    {% elif planned_exercise.target_duration %}
+                                        {{ planned_exercise.target_duration }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'training:iniciar_treino' today_workout.id %}"
+                class="primary-button"
+            >
+
+                Começar treino
+
+                <span>→</span>
+
+            </a>
+
+        </article>
+
+        {% else %}
+
+        <article class="training-card training-card--today">
+
+            <div class="training-card__top">
+
+                <span class="badge badge--today">
+                    ● Hoje
+                </span>
+
+                <span class="training-card__date">
+                    {% now "d/m/Y" %}
+                </span>
+
+            </div>
+
+
+            <div class="training-card__content">
+
+                <h3>
+                    Dia de descanso
+                </h3>
+
+                <p class="training-card__muscles">
+                    Nenhum treino programado para hoje.
+                </p>
+
+            </div>
+
+
+            <a
+                href="{% url 'training:programacao' %}"
+                class="secondary-button"
+            >
+
+                Ver programação
+
+                <span>→</span>
+
+            </a>
+
+        </article>
+
+        {% endif %}
+
+
+
+        <!-- PRÓXIMO TREINO -->
+
+        {% if next_workout %}
+
+        <article class="training-card">
+
+            <div class="training-card__top">
+
+                <span class="badge">
+                    Próximo treino
+                </span>
+
+                <span class="training-card__date">
+
+                    {% if next_workout.weekday == 0 %}
+                        Segunda
+                    {% elif next_workout.weekday == 1 %}
+                        Terça
+                    {% elif next_workout.weekday == 2 %}
+                        Quarta
+                    {% elif next_workout.weekday == 3 %}
+                        Quinta
+                    {% elif next_workout.weekday == 4 %}
+                        Sexta
+                    {% elif next_workout.weekday == 5 %}
+                        Sábado
+                    {% elif next_workout.weekday == 6 %}
+                        Domingo
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <div class="training-card__content">
+
+                <h3>
+                    {{ next_workout.name }}
+                </h3>
+
+
+                <p class="training-card__muscles">
+
+                    {% for planned_exercise in next_workout.planned_exercises.all %}
+
+                        {{ planned_exercise.exercise.name }}
+
+                        {% if not forloop.last %}
+                            ·
+                        {% endif %}
+
+                    {% empty %}
+
+                        Nenhum exercício cadastrado.
+
+                    {% endfor %}
+
+                </p>
+
+
+                <div class="training-info">
+
+                    <div>
+
+                        <span>
+                            EXERCÍCIOS
+                        </span>
+
+                        <strong>
+                            {{ next_workout.planned_exercises.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            DURAÇÃO
+                        </span>
+
+                        <strong>
+                            ~10 min
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'training:programacao' %}"
+                class="secondary-button"
+            >
+
+                Ver programação
+
+                <span>→</span>
+
+            </a>
+
+        </article>
+
+        {% endif %}
+
+        {% if next_workout %}
+
+            {# seu card normal #}
+
+        {% else %}
+
+        <article class="training-card">
+
+            <div class="training-card__top">
+
+                <span class="badge">
+                    Próximo treino
+                </span>
+            </div>
+
+            <div class="training-card__content">
+
+                <h3>
+                    Nenhum treino
+                </h3>
+
+                <p class="training-card__muscles">
+                    Não há outro treino programado.
+                </p>
+
+            </div>
+
+            <a
+                href="{% url 'training:programacao' %}"
+                class="secondary-button"
+            >
+                Ver programação
+                <span>→</span>
+            </a>
+
+        </article>
+
+        {% endif %}
+
+
+
+        <!-- ÚLTIMO TREINO -->
+
+        {% if last_workout %}
+
+        <article class="training-card">
+
+            <div class="training-card__top">
+
+                <span class="badge badge--completed">
+                    ✓ Concluído
+                </span>
+
+                <span class="training-card__date">
+                    {{ last_workout.date|date:"d/m/Y" }}
+                </span>
+
+            </div>
+
+
+            <div class="training-card__content">
+
+                <h3>
+                    {{ last_workout.name }}
+                </h3>
+
+
+                <div class="last-training">
+
+                    <div>
+
+                        <strong>
+                            {{ last_workout_stats.duration_minutes }}
+                        </strong>
+
+
+                        <span>
+                            minutos
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            {{ last_workout_stats.sets }}
+                        </strong>
+
+                        <span>
+                            séries
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            {{ last_workout_stats.reps }}
+                        </strong>
+
+                        <span>
+                            reps
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="progress-result">
+
+                    <span>
+                        TREINO
+                    </span>
+
+                    <strong>
+                        {{ last_workout.name }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'training:historico' %}"
+                class="secondary-button"
+            >
+
+                Ver histórico
+
+                <span>→</span>
+
+            </a>
+
+        </article>
+
+        {% endif %}
+
+
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     HÁBITOS
+========================== -->
+
+<section class="section">
+
+    <div class="section__header">
+        <div>
+            <span class="section__eyebrow">ROTINA DIÁRIA</span>
+            <h2>Hábitos</h2>
+        </div>
+
+        <span class="completion">
+            <strong>1</strong> / 3 concluídos
+        </span>
+    </div>
+
+
+    <div class="habits-card">
+
+        <div class="habits-card__intro">
+
+            <div class="habits-icon">
+                ✓
+            </div>
+
+            <div>
+                <h3>Hábitos de hoje</h3>
+
+                <p>
+                    Pequenas ações diárias constroem a consistência
+                    necessária para evoluir no treino.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="habits-list">
+
+            <label class="habit">
+                <input type="checkbox" checked>
+
+                <span class="habit__check"></span>
+
+                <span class="habit__text">
+                    Beber 2L de água
+                </span>
+
+                <span class="habit__status">
+                    Concluído
+                </span>
+            </label>
+
+
+            <label class="habit">
+                <input type="checkbox">
+
+                <span class="habit__check"></span>
+
+                <span class="habit__text">
+                    Meditação
+                </span>
+
+                <span class="habit__status">
+                    Pendente
+                </span>
+            </label>
+
+
+            <label class="habit">
+                <input type="checkbox">
+
+                <span class="habit__check"></span>
+
+                <span class="habit__text">
+                    Sem redes sociais pela manhã
+                </span>
+
+                <span class="habit__status">
+                    Pendente
+                </span>
+            </label>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CONSISTÊNCIA
+========================== -->
+
+<section class="section">
+
+    <div class="section__header">
+        <div>
+            <span class="section__eyebrow">DESEMPENHO</span>
+            <h2>Consistência</h2>
+        </div>
+
+        <span class="week-label">
+            Esta semana
+        </span>
+    </div>
+
+
+    <div class="consistency-card">
+
+        <div class="consistency-card__top">
+
+            <div>
+                <span class="consistency-number">5</span>
+
+                <span class="consistency-description">
+                    treinos esta semana
+                </span>
+            </div>
+
+            <div class="consistency-streak">
+                <span>🔥</span>
+                <strong>5 dias</strong>
+                <small>sequência</small>
+            </div>
+
+        </div>
+
+
+        <div class="calendar">
+
+            <div class="calendar-day calendar-day--completed">
+                <span>SEG</span>
+                <strong>●</strong>
+            </div>
+
+            <div class="calendar-day calendar-day--rest">
+                <span>TER</span>
+                <strong>—</strong>
+            </div>
+
+            <div class="calendar-day calendar-day--pending">
+                <span>QUA</span>
+                <strong>○</strong>
+            </div>
+
+            <div class="calendar-day calendar-day--rest">
+                <span>QUI</span>
+                <strong>—</strong>
+            </div>
+
+            <div class="calendar-day calendar-day--pending">
+                <span>SEX</span>
+                <strong>○</strong>
+            </div>
+
+            <div class="calendar-day calendar-day--rest">
+                <span>SÁB</span>
+                <strong>—</strong>
+            </div>
+
+            <div class="calendar-day calendar-day--pending">
+                <span>DOM</span>
+                <strong>○</strong>
+            </div>
+
+        </div>
+
+
+        <div class="calendar-legend">
+            <span>
+                <b class="legend-dot legend-dot--completed">●</b>
+                Treino realizado
+            </span>
+
+            <span>
+                <b>—</b>
+                Descanso
+            </span>
+
+            <span>
+                <b>○</b>
+                Não realizado
+            </span>
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+<a href="{% url 'users:logout' %}">
+    Sair
+</a>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="{% static 'js/home.js' %}"></script>
+
+{% endblock %}

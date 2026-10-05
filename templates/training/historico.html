@@ -1,0 +1,248 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Histórico | Calistenia</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/historico.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+<main class="history-page">
+
+    <!-- =========================
+         CABEÇALHO
+    ========================== -->
+
+    <header class="history-header">
+
+        <div>
+
+            <span class="history-header__eyebrow">
+                DESEMPENHO
+            </span>
+
+            <h1>
+                Histórico
+            </h1>
+
+            <p>
+                Acompanhe os treinos que você já realizou.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'training:home' %}"
+            class="back-button"
+        >
+            <span>←</span>
+            Voltar
+        </a>
+
+    </header>
+
+
+    <!-- =========================
+         TREINOS
+    ========================== -->
+
+    <section class="history-list">
+
+        {% for workout in workouts %}
+
+            <article class="history-card">
+
+                <!-- Data -->
+
+                <div class="history-card__date">
+
+                    <span class="history-card__day">
+                        {{ workout.date|date:"d" }}
+                    </span>
+
+                    <span class="history-card__month">
+                        {{ workout.date|date:"M"|upper }}
+                    </span>
+
+                </div>
+
+
+                <!-- Conteúdo -->
+
+                <div class="history-card__content">
+
+                    <div class="history-card__top">
+
+                        <div>
+
+                            <span class="history-card__eyebrow">
+                                TREINO REALIZADO
+                            </span>
+
+                            <h2>
+                                {{ workout.name }}
+                            </h2>
+
+                        </div>
+
+
+                        <span class="completed-badge">
+                            ✓ Concluído
+                        </span>
+
+                    </div>
+
+
+                    <!-- Informações -->
+
+                    <div class="history-stats">
+
+                        <div class="history-stat">
+
+                            <span class="history-stat__value">
+                                {{ workout.duration_minutes }}
+                            </span>
+
+                            <span class="history-stat__label">
+                                minutos
+                            </span>
+
+                        </div>
+
+
+                        <div class="history-stat">
+
+                            <span class="history-stat__value">
+                                {{ workout.exercise_count }}
+                            </span>
+
+                            <span class="history-stat__label">
+                                exercícios
+                            </span>
+
+                        </div>
+
+
+                        <div class="history-stat">
+
+                            <span class="history-stat__value">
+                                {{ workout.set_count }}
+                            </span>
+
+                            <span class="history-stat__label">
+                                séries
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Rodapé -->
+
+                    <div class="history-card__footer">
+
+                        {% if workout.finished_at %}
+
+                            <span>
+                                Finalizado às
+                                {{ workout.finished_at|date:"H:i" }}
+                            </span>
+
+                        {% endif %}
+
+
+                        <a
+                            href="{% url 'training:treino_atual' workout.id %}"
+                            class="history-button"
+                        >
+                            Ver treino
+                            <span>→</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+        {% empty %}
+
+            <!-- =========================
+                 SEM HISTÓRICO
+            ========================== -->
+
+            <section class="empty-history">
+
+                <div class="empty-history__icon">
+                    ◌
+                </div>
+
+                <span class="empty-history__eyebrow">
+                    HISTÓRICO
+                </span>
+
+                <h2>
+                    Nenhum treino realizado
+                </h2>
+
+                <p>
+                    Seus treinos concluídos aparecerão aqui.
+                    Comece um treino para construir seu histórico.
+                </p>
+
+
+                <a
+                    href="{% url 'training:programacao' %}"
+                    class="empty-history__button"
+                >
+                    Ver programação
+                    <span>→</span>
+                </a>
+
+            </section>
+
+        {% endfor %}
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

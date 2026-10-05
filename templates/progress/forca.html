@@ -1,0 +1,148 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Força | Calistenia</title>
+
+</head>
+
+<body>
+
+<main>
+
+    <h1>Força</h1>
+
+    {% for data in exercises %}
+
+    <section class="exercise-progress">
+
+        <h2>
+            {{ data.exercise.name }}
+        </h2>
+
+        <p>
+            {% if data.exercise.metric == "repetitions" %}
+                Repetições
+
+            {% elif data.exercise.metric == "weight" %}
+                Carga
+
+            {% elif data.exercise.metric == "duration" %}
+                Duração
+            {% endif %}
+        </p>
+
+
+        <div class="progress-stats">
+
+            <div>
+                <span>Melhor</span>
+
+                <strong>
+                    {{ data.best }}
+
+                    {% if data.exercise.metric == "repetitions" %}
+                        reps
+                    {% elif data.exercise.metric == "weight" %}
+                        kg
+                    {% elif data.exercise.metric == "duration" %}
+                        s
+                    {% endif %}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Último</span>
+
+                <strong>
+                    {{ data.last }}
+
+                    {% if data.exercise.metric == "repetitions" %}
+                        reps
+                    {% elif data.exercise.metric == "weight" %}
+                        kg
+                    {% elif data.exercise.metric == "duration" %}
+                        s
+                    {% endif %}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Evolução</span>
+
+                <strong>
+
+                    {% if data.evolution is not None %}
+
+                        {% if data.evolution > 0 %}
+                            +{{ data.evolution }}
+                        {% else %}
+                            {{ data.evolution }}
+                        {% endif %}
+
+                    {% else %}
+                        —
+
+                    {% endif %}
+
+                </strong>
+            </div>
+
+            
+
+
+        </div>
+
+
+        <h3>Histórico</h3>
+
+        {% for workout in data.history %}
+
+            <div class="history-row">
+
+                <span>
+                    {{ workout.date }}
+                </span>
+
+                <strong>
+
+                    {% if data.exercise.metric == "repetitions" %}
+                        {{ workout.value }} reps
+
+                    {% elif data.exercise.metric == "weight" %}
+                        {{ workout.value }} kg
+
+                    {% elif data.exercise.metric == "duration" %}
+                        {{ workout.value }}
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+        {% endfor %}
+
+
+    </section>
+
+    {% endfor %}
+
+
+</main>
+
+</body>
+
+</html>

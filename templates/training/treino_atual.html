@@ -1,0 +1,458 @@
+{% load static %}
+
+<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+    {{ workout.name }} | Calistenia
+</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/treino_atual.css' %}"
+>
+
+</head> <body>
+<main class="workout-page">
+
+    <!-- =========================
+         CABEÇALHO
+    ========================== -->
+
+    <header class="workout-header">
+
+        <div class="workout-header__top">
+
+            <a
+                href="{% url 'training:home' %}"
+                class="back-link"
+            >
+                <span>←</span>
+                Voltar
+            </a>
+
+            <span class="workout-status">
+                {% if workout.status == "in_progress" %}
+                    <span class="status-dot status-dot--active"></span>
+                    Em andamento
+                {% else %}
+                    <span class="status-dot"></span>
+                    {{ workout.get_status_display }}
+                {% endif %}
+            </span>
+
+        </div>
+
+
+        <div class="workout-header__content">
+
+            <div>
+
+                <span class="workout-header__eyebrow">
+                    TREINO
+                </span>
+
+                <h1>
+                    {{ workout.name }}
+                </h1>
+
+                <p>
+                    {{ workout.date }}
+                </p>
+
+            </div>
+
+
+            {% if workout.started_at %}
+
+                <div class="workout-time">
+
+                    <span>
+                        INÍCIO
+                    </span>
+
+                    <strong>
+                        {{ workout.started_at|date:"H:i" }}
+                    </strong>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         EXERCÍCIOS
+    ========================== -->
+
+    <section class="exercise-list">
+
+        {% for workout_exercise in workout.workout_exercises.all %}
+
+            <article class="exercise-card">
+
+                <!-- Cabeçalho do exercício -->
+
+                <div class="exercise-card__header">
+
+                    <div class="exercise-title">
+
+                        <span class="exercise-number">
+                            {{ forloop.counter|stringformat:"02d" }}
+                        </span>
+
+                        <div>
+
+                            <span class="exercise-eyebrow">
+                                EXERCÍCIO
+                            </span>
+
+                            <h2>
+                                {{ workout_exercise.exercise.name }}
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if workout_exercise.planned_exercise %}
+
+                        <div class="planned-badge">
+                            PLANEJADO
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Meta planejada -->
+
+                {% if workout_exercise.planned_exercise %}
+
+                    <div class="planned">
+
+                        <span class="planned__label">
+                            META
+                        </span>
+
+                        <div class="planned__values">
+
+                            {% if workout_exercise.planned_exercise.target_sets %}
+                                <span>
+                                    {{ workout_exercise.planned_exercise.target_sets }} séries
+                                </span>
+                            {% endif %}
+
+                            {% if workout_exercise.planned_exercise.target_repetitions %}
+                                <span>
+                                    {{ workout_exercise.planned_exercise.target_repetitions }} reps
+                                </span>
+                            {% endif %}
+
+                            {% if workout_exercise.planned_exercise.target_weight %}
+                                <span>
+                                    {{ workout_exercise.planned_exercise.target_weight }} kg
+                                </span>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- Séries -->
+
+                <div class="sets">
+
+                    <div class="sets__header">
+
+                        <span>
+                            SÉRIES REALIZADAS
+                        </span>
+
+                        <span>
+                            {% if workout_exercise.sets.all %}
+                                {{ workout_exercise.sets.count }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </span>
+
+                    </div>
+
+
+                    {% for workout_set in workout_exercise.sets.all %}
+
+                        <div
+                            class="
+                                set
+                                {% if workout_set.completed %}
+                                    set--completed
+                                {% endif %}
+                            "
+                        >
+
+                            <div class="set__number">
+
+                                {% if workout_set.completed %}
+                                    ✓
+                                {% else %}
+                                    {{ workout_set.number }}
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="set__data">
+
+                                {% if workout_set.repetitions %}
+
+                                    <div class="set-value">
+
+                                        <strong>
+                                            {{ workout_set.repetitions }}
+                                        </strong>
+
+                                        <span>
+                                            reps
+                                        </span>
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                {% if workout_set.weight %}
+
+                                    <div class="set-value">
+
+                                        <strong>
+                                            {{ workout_set.weight }}
+                                        </strong>
+
+                                        <span>
+                                            kg
+                                        </span>
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                {% if workout_set.duration %}
+
+                                    <div class="set-value">
+
+                                        <strong>
+                                            {{ workout_set.duration }}
+                                        </strong>
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            {% if workout.status == "in_progress" %}
+
+                            <div class="set-actions">
+
+                                {% if workout_set.completed %}
+
+                                    <span class="completed-label">
+                                        ✓ Concluída
+                                    </span>
+
+                                {% else %}
+
+                                    <form
+                                        method="post"
+                                        action="{% url 'training:concluir_serie' workout.id workout_exercise.id workout_set.id %}"
+                                    >
+
+                                        {% csrf_token %}
+
+                                        <button type="submit">
+                                            Concluir
+                                        </button>
+
+                                    </form>
+
+                                {% endif %}
+
+
+                                <a
+                                    href="{% url 'training:editar_serie' workout.id workout_exercise.id workout_set.id %}"
+                                >
+                                    Editar
+                                </a>
+
+
+                                <form
+                                    method="post"
+                                    action="{% url 'training:excluir_serie' workout.id workout_exercise.id workout_set.id %}"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        onclick="return confirm('Excluir esta série?');"
+                                    >
+                                        Excluir
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        {% else %}
+
+                            {% if workout_set.completed %}
+
+                                <span class="completed-label">
+                                    ✓ Concluída
+                                </span>
+
+                            {% else %}
+
+                                <span class="pending-label">
+                                    Registrada
+                                </span>
+
+                            {% endif %}
+
+                        {% endif %}
+
+
+
+                        </div>
+
+
+                    {% empty %}
+
+                        <div class="empty-sets">
+
+                            <span>
+                                —
+                            </span>
+
+                            <p>
+                                Nenhuma série registrada ainda.
+                            </p>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Adicionar série -->
+
+                {% if workout.status == "in_progress" %}
+
+                    <a
+                        href="{% url 'training:adicionar_serie' workout.id workout_exercise.id %}"
+                        class="add-set-button"
+                    >
+                        <span>+</span>
+                        Adicionar série
+                    </a>
+
+                {% endif %}
+
+            </article>
+
+        {% empty %}
+
+            <div class="empty-workout">
+
+                <span class="empty-workout__icon">
+                    ◌
+                </span>
+
+                <h2>
+                    Nenhum exercício neste treino
+                </h2>
+
+                <p>
+                    Este treino ainda não possui exercícios cadastrados.
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+    </section>
+
+
+    <!-- =========================
+         FINALIZAR
+    ========================== -->
+
+    {% if workout.status == "in_progress" %}
+
+        <section class="finish-section">
+
+            <div class="finish-section__content">
+
+                <span class="finish-section__eyebrow">
+                    TREINO EM ANDAMENTO
+                </span>
+
+                <h2>
+                    Terminou seu treino?
+                </h2>
+
+                <p>
+                    Ao finalizar, seu treino será registrado no histórico.
+                </p>
+
+            </div>
+
+
+            <form
+                method="post"
+                action="{% url 'training:finalizar_treino' workout.id %}"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="finish-button"
+                >
+                    <span>
+                        Finalizar treino
+                    </span>
+
+                    <span>
+                        ✓
+                    </span>
+                </button>
+
+            </form>
+
+        </section>
+
+    {% endif %}
+
+</main>
+
+</body> 
+</html>

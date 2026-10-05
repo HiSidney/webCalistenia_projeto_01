@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Calistenia</title>
+</head>
+
+<body>
+
+    <header>
+
+        <h1>
+            Olá, {{ user.username }}
+        </h1>
+
+        <a href="{% url 'users:logout' %}">
+            Sair
+        </a>
+
+    </header>
+
+    <main>
+
+        <h2>
+            Treinos
+        </h2>
+
+        <ul>
+
+            <li>
+                <a href="{% url 'training:programacao' %}">
+                    Programação
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'training:historico' %}">
+                    Histórico
+                </a>
+            </li>
+
+        </ul>
+
+        <h2>
+            Progresso
+        </h2>
+
+        <p>
+            Em breve...
+        </p>
+
+        <h2>
+            Hábitos
+        </h2>
+
+        <p>
+            Em breve...
+        </p>
+
+    </main>
+
+</body>
+
+</html>

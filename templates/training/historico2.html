@@ -1,0 +1,234 @@
+{% load static %}
+
+<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Histórico | Calistenia</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/historico.css' %}"
+>
+
+</head> <body>
+<main class="history">
+
+    <!-- =========================
+         CABEÇALHO
+    ========================== -->
+
+    <header class="history-header">
+
+        <div>
+
+            <span class="history-header__eyebrow">
+                DESEMPENHO
+            </span>
+
+            <h1>
+                Histórico de treinos
+            </h1>
+
+            <p>
+                Acompanhe sua jornada e veja tudo o que já conquistou.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'training:home' %}"
+            class="back-button"
+        >
+            <span>←</span>
+            Voltar
+        </a>
+
+    </header>
+
+
+    <!-- =========================
+         CONTEÚDO
+    ========================== -->
+
+    {% if workouts %}
+
+        <section class="history-list">
+
+            {% for workout in workouts %}
+
+                <article class="workout-card">
+
+                    <!-- Linha lateral -->
+
+                    <div class="workout-card__indicator"></div>
+
+
+                    <!-- Cabeçalho do treino -->
+
+                    <div class="workout-card__header">
+
+                        <div class="workout-title">
+
+                            <span class="workout-number">
+                                TREINO {{ forloop.counter|stringformat:"02d" }}
+                            </span>
+
+                            <h2>
+                                {{ workout.name }}
+                            </h2>
+
+                        </div>
+
+
+                        <span
+                            class="
+                                workout-status
+                                {% if workout.status == 'completed' %}
+                                    workout-status--completed
+                                {% elif workout.status == 'started' %}
+                                    workout-status--started
+                                {% else %}
+                                    workout-status--default
+                                {% endif %}
+                            "
+                        >
+                            {% if workout.status == 'completed' %}
+                                <span>●</span>
+                            {% elif workout.status == 'started' %}
+                                <span>◐</span>
+                            {% else %}
+                                <span>○</span>
+                            {% endif %}
+
+                            {{ workout.get_status_display }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- Informações -->
+
+                    <div class="workout-info">
+
+                        <div class="info-item">
+
+                            <span class="info-item__label">
+                                DATA
+                            </span>
+
+                            <strong>
+                                {{ workout.date }}
+                            </strong>
+
+                        </div>
+
+
+                        {% if workout.started_at %}
+
+                            <div class="info-item">
+
+                                <span class="info-item__label">
+                                    INÍCIO
+                                </span>
+
+                                <strong>
+                                    {{ workout.started_at|date:"d/m/Y H:i" }}
+                                </strong>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if workout.finished_at %}
+
+                            <div class="info-item">
+
+                                <span class="info-item__label">
+                                    FIM
+                                </span>
+
+                                <strong>
+                                    {{ workout.finished_at|date:"d/m/Y H:i" }}
+                                </strong>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Ação -->
+
+                    <div class="workout-card__footer">
+
+                        <span class="workout-card__description">
+                            Sessão de treinamento
+                        </span>
+
+                        <a
+                            href="{% url 'training:treino_atual' workout.id %}"
+                            class="view-button"
+                        >
+                            Ver treino
+                            <span>→</span>
+                        </a>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </section>
+
+
+    {% else %}
+
+        <!-- =========================
+             ESTADO VAZIO
+        ========================== -->
+
+        <section class="empty-state">
+
+            <div class="empty-state__icon">
+                ◌
+            </div>
+
+            <span class="empty-state__eyebrow">
+                SEM REGISTROS
+            </span>
+
+            <h2>
+                Nenhum treino realizado
+            </h2>
+
+            <p>
+                Seus treinos concluídos aparecerão aqui.
+                Comece sua jornada hoje.
+            </p>
+
+            <a
+                href="{% url 'training:home' %}"
+                class="empty-state__button"
+            >
+                Começar treino
+                <span>→</span>
+            </a>
+
+        </section>
+
+    {% endif %}
+
+</main>
+
+</body> </html>

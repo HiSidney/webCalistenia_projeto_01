@@ -1,0 +1,333 @@
+{% load static %}
+
+<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programação | Calistenia</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/programacao.css' %}"
+>
+
+</head> <body>
+<main class="program">
+    {% if start_error %}
+
+        <div class="program-message program-message--error">
+
+            <strong>
+                Não foi possível iniciar o treino
+            </strong>
+
+            <p>
+                {{ start_error }}
+            </p>
+
+        </div>
+
+    {% endif %}
+
+    <!-- =========================
+         CABEÇALHO
+    ========================== -->
+
+    <header class="program-header">
+
+        <div>
+
+            <span class="program-header__eyebrow">
+                PLANEJAMENTO
+            </span>
+
+            <h1>
+                Programação
+            </h1>
+
+            <p>
+                Organize seus treinos e mantenha sua evolução constante.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'training:home' %}"
+            class="back-button"
+        >
+            <span>←</span>
+            Voltar
+        </a>
+
+    </header>
+
+
+    <!-- =========================
+         PROGRAMAS
+    ========================== -->
+
+    {% for plan in training_plans %}
+
+        <section class="training-plan">
+
+            <!-- Cabeçalho do programa -->
+
+            <div class="plan-header">
+
+                <div class="plan-header__info">
+
+                    <span class="plan-header__eyebrow">
+                        PROGRAMA ATIVO
+                    </span>
+
+                    <h2>
+                        {{ plan.name }}
+                    </h2>
+
+                    {% if plan.description %}
+
+                        <p>
+                            {{ plan.description }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="plan-badge">
+                    <span></span>
+                    Ativo
+                </div>
+
+            </div>
+
+
+            <!-- Treinos -->
+
+            <div class="workouts">
+
+                {% for workout in plan.planned_workouts.all %}
+
+                    <article class="workout">
+
+                        <!-- Dia -->
+
+                        <div class="workout-day">
+
+                            <span class="workout-day__label">
+                                {{ workout.get_weekday_display }}
+                            </span>
+
+                            <span class="workout-day__line"></span>
+
+                        </div>
+
+
+                        <!-- Conteúdo -->
+
+                        <div class="workout-content">
+
+                            <div class="workout-content__header">
+
+                                <div>
+
+                                    <span class="workout__eyebrow">
+                                        TREINO PROGRAMADO
+                                    </span>
+
+                                    <h3>
+                                        {{ workout.name }}
+                                    </h3>
+
+                                </div>
+
+
+                                {% if workout.today_workout %}
+
+                                    {% if workout.today_workout.status == "in_progress" %}
+
+                                        <a
+                                            href="{% url 'training:treino_atual' workout.today_workout.id %}"
+                                            class="start-button"
+                                        >
+                                            Continuar
+                                            <span>→</span>
+                                        </a>
+
+                                    {% elif workout.today_workout.status == "completed" %}
+
+                                        <a
+                                            href="{% url 'training:treino_atual' workout.today_workout.id %}"
+                                            class="start-button"
+                                        >
+                                            Concluído
+                                            <span>✓</span>
+                                        </a>
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <a
+                                        href="{% url 'training:iniciar_treino' workout.id %}"
+                                        class="start-button"
+                                    >
+                                        Iniciar
+                                        <span>→</span>
+                                    </a>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            {% if workout.notes %}
+
+                                <p class="workout-notes">
+                                    {{ workout.notes }}
+                                </p>
+
+                            {% endif %}
+
+
+                            <!-- Exercícios -->
+
+                            <div class="exercise-list">
+
+                                {% for planned_exercise in workout.planned_exercises.all %}
+
+                                    <div class="exercise">
+
+                                        <div class="exercise__number">
+                                            {{ forloop.counter|stringformat:"02d" }}
+                                        </div>
+
+
+                                        <div class="exercise__name">
+
+                                            <strong>
+                                                {{ planned_exercise.exercise.name }}
+                                            </strong>
+
+                                        </div>
+
+
+                                        <div class="exercise__target">
+
+                                            {% if planned_exercise.target_sets %}
+                                                <span>
+                                                    {{ planned_exercise.target_sets }} séries
+                                                </span>
+                                            {% endif %}
+
+                                            {% if planned_exercise.target_repetitions %}
+                                                <span>
+                                                    × {{ planned_exercise.target_repetitions }} reps
+                                                </span>
+                                            {% endif %}
+
+                                            {% if planned_exercise.target_weight %}
+                                                <span>
+                                                    {{ planned_exercise.target_weight }} kg
+                                                </span>
+                                            {% endif %}
+
+                                            {% if planned_exercise.target_duration %}
+                                                <span>
+                                                    {{ planned_exercise.target_duration }}
+                                                </span>
+                                            {% endif %}
+
+                                        </div>
+
+                                    </div>
+
+                                {% empty %}
+
+                                    <div class="empty-exercises">
+                                        Nenhum exercício cadastrado.
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                {% empty %}
+
+                    <div class="empty-workouts">
+
+                        <span class="empty-workouts__icon">
+                            ◌
+                        </span>
+
+                        <div>
+                            <strong>
+                                Nenhum treino programado
+                            </strong>
+
+                            <p>
+                                Este programa ainda não possui treinos cadastrados.
+                            </p>
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    {% empty %}
+
+        <!-- =========================
+             SEM PROGRAMA
+        ========================== -->
+
+        <section class="empty-state">
+
+            <div class="empty-state__icon">
+                +
+            </div>
+
+            <span class="empty-state__eyebrow">
+                PROGRAMAÇÃO
+            </span>
+
+            <h2>
+                Nenhum programa ativo
+            </h2>
+
+            <p>
+                Você ainda não possui nenhum programa de treinamento ativo.
+                Crie uma rotina para começar sua evolução.
+            </p>
+
+            <a
+                href="{% url 'training:home' %}"
+                class="empty-state__button"
+            >
+                Voltar para início
+                <span>→</span>
+            </a>
+
+        </section>
+
+    {% endfor %}
+
+</main>
+
+</body> </html>

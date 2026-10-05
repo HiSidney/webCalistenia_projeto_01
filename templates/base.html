@@ -1,0 +1,75 @@
+{% load static %}
+
+<!DOCTYPE html> <html lang="pt-br"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calistenia</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- CSS -->
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+{% block head %}
+{% endblock %}
+
+</head> <body>
+<header class="header">
+    <div class="header__container">
+
+        <!-- Logo -->
+        <div class="logo">
+            <a href="/" class="logo__link">
+                <span class="logo__icon">C</span>
+                <span class="logo__text">Calistenia</span>
+            </a>
+        </div>
+
+        <!-- Menu -->
+        <nav class="menu" aria-label="Navegação principal">
+            <ul class="menu__list">
+                <li class="menu__item">
+                    <a href="/" class="menu__link active">Home</a>
+                </li>
+
+                <li class="menu__item">
+                    <a href="#" class="menu__link">Treinos</a>
+                </li>
+
+                <li class="menu__item">
+                    <a href="#" class="menu__link">Progresso</a>
+                </li>
+
+                <li class="menu__item">
+                    <a href="#" class="menu__link">Hábitos</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Perfil -->
+        <button class="profile-button" type="button" aria-label="Abrir perfil">
+            <span class="profile-button__icon">◉</span>
+        </button>
+
+    </div>
+</header>
+
+<main class="main">
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer class="footer">
+    <div class="footer__container">
+        <p>© 2026 Calistenia</p>
+    </div>
+</footer>
+
+<script src="{% static 'js/base.js' %}"></script>
+
+{% block js %}
+{% endblock %}
+
+</body> </html>

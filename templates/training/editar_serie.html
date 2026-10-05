@@ -1,0 +1,144 @@
+{% load static %}
+
+<!DOCTYPE html> <html lang="pt-BR"> <head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    Editar série | {{ workout_exercise.exercise.name }}
+</title>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/treino_atual.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/editar_serie.css' %}"
+>
+
+</head> <body> <main class="workout-page">
+<!-- =========================
+     HEADER
+========================== -->
+
+<header class="workout-header">
+
+    <div class="workout-header__top">
+
+        <a
+            href="{% url 'training:treino_atual' workout.id %}"
+            class="back-link"
+        >
+            <span>←</span>
+            Voltar para o treino
+        </a>
+
+    </div>
+
+
+    <div class="workout-header__content">
+
+        <div>
+
+            <span class="workout-header__eyebrow">
+                EDITAR SÉRIE
+            </span>
+
+            <h1>
+                {{ workout_exercise.exercise.name }}
+            </h1>
+
+            <p>
+                Série {{ workout_set.number }}
+            </p>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =========================
+     FORMULÁRIO
+========================== -->
+
+<section class="edit-card">
+
+    <div class="edit-card__header">
+
+        <div class="edit-card__icon">
+            ✎
+        </div>
+
+        <div>
+
+            <span>
+                REGISTRO DE DESEMPENHO
+            </span>
+
+            <h2>
+                Alterar dados
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <div class="edit-card__description">
+
+        <p>
+            Atualize as informações registradas nesta série.
+        </p>
+
+    </div>
+
+
+    <form
+        method="post"
+        class="edit-form"
+    >
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+
+        <div class="edit-actions">
+
+            <a
+                href="{% url 'training:treino_atual' workout.id %}"
+                class="cancel-button"
+            >
+                Cancelar
+            </a>
+
+            <button
+                type="submit"
+                class="save-button"
+            >
+                <span>
+                    Salvar alterações
+                </span>
+
+                <span>
+                    ✓
+                </span>
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+</main> 
+</body> 
+</html>

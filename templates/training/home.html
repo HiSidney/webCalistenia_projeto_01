@@ -1,0 +1,193 @@
+{% load static %}
+
+<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treinos | Calistenia</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/training_home.css' %}"
+>
+
+</head> <body>
+<main class="training-home">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="page-header">
+
+        <a
+            href="/"
+            class="back-link"
+        >
+            <span>←</span>
+            Página inicial
+        </a>
+
+        <div class="page-heading">
+
+            <span class="page-eyebrow">
+                CALISTENIA
+            </span>
+
+            <h1>
+                Treinos
+            </h1>
+
+            <p>
+                Organize seus treinos, acompanhe sua programação
+                e veja sua evolução.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         NAVEGAÇÃO
+    ========================== -->
+
+    <nav class="training-navigation">
+
+        <a
+            href="{% url 'training:programacao' %}"
+            class="training-card"
+        >
+
+            <div class="training-card__top">
+
+                <span class="training-card__number">
+                    01
+                </span>
+
+                <span class="training-card__arrow">
+                    →
+                </span>
+
+            </div>
+
+
+            <div class="training-card__content">
+
+                <span class="training-card__eyebrow">
+                    PLANEJAMENTO
+                </span>
+
+                <h2>
+                    Programação
+                </h2>
+
+                <p>
+                    Veja seus treinos planejados, exercícios,
+                    metas e próximos dias de treino.
+                </p>
+
+            </div>
+
+
+            <div class="training-card__footer">
+
+                <span>
+                    Ver programação
+                </span>
+
+                <span>
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="{% url 'training:historico' %}"
+            class="training-card"
+        >
+
+            <div class="training-card__top">
+
+                <span class="training-card__number">
+                    02
+                </span>
+
+                <span class="training-card__arrow">
+                    →
+                </span>
+
+            </div>
+
+
+            <div class="training-card__content">
+
+                <span class="training-card__eyebrow">
+                    EVOLUÇÃO
+                </span>
+
+                <h2>
+                    Histórico
+                </h2>
+
+                <p>
+                    Consulte seus treinos realizados, séries,
+                    datas e desempenho ao longo do tempo.
+                </p>
+
+            </div>
+
+
+            <div class="training-card__footer">
+
+                <span>
+                    Ver histórico
+                </span>
+
+                <span>
+                    →
+                </span>
+
+            </div>
+
+        </a>
+
+    </nav>
+
+
+    <!-- =========================
+         DICA
+    ========================== -->
+
+    <section class="training-tip">
+
+        <span class="training-tip__icon">
+            +
+        </span>
+
+        <div>
+
+            <strong>
+                Consistência é o objetivo.
+            </strong>
+
+            <p>
+                Treine, registre seu desempenho e acompanhe
+                sua evolução ao longo do tempo.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body> </html>

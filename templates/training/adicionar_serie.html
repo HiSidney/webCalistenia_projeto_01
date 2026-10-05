@@ -1,0 +1,117 @@
+{% load static %}
+
+<!DOCTYPE html> <html lang="pt-BR"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+    Adicionar série | Calistenia
+</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/adicionar_serie.css' %}"
+>
+
+</head> <body>
+<main class="series-page">
+
+    <div class="series-card">
+
+        <!-- Voltar -->
+
+        <a
+            href="{% url 'training:treino_atual' workout.id %}"
+            class="back-link"
+        >
+            <span>←</span>
+            Voltar para o treino
+        </a>
+
+
+        <!-- Cabeçalho -->
+
+        <header class="series-header">
+
+            <span class="series-header__eyebrow">
+                REGISTRAR DESEMPENHO
+            </span>
+
+            <h1>
+                {{ workout_exercise.exercise.name }}
+            </h1>
+
+            <p>
+                Registre os dados da série que acabou de realizar.
+            </p>
+
+        </header>
+
+
+        <!-- Indicador -->
+
+        <div class="series-indicator">
+
+            <div class="series-indicator__icon">
+                +
+            </div>
+
+            <div>
+
+                <span>
+                    NOVA SÉRIE
+                </span>
+
+                <strong>
+                    Preencha seu desempenho
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- Formulário -->
+
+        <form method="post" class="series-form">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button
+                type="submit"
+                class="save-button"
+            >
+                <span>
+                    Salvar série
+                </span>
+
+                <span class="save-button__arrow">
+                    →
+                </span>
+            </button>
+
+        </form>
+
+
+        <!-- Rodapé -->
+
+        <div class="series-footer">
+
+            <span>
+                Seus dados serão registrados no histórico do treino.
+            </span>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body> </html>

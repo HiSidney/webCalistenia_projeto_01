@@ -1,0 +1,513 @@
+:root {
+--bg: #0b0d0e;
+--surface: #111415;
+--surface-light: #181c1d;
+
+--border: #272d2e;
+
+--text: #f5f7f7;
+--text-muted: #8b9395;
+
+--primary: #7cff6b;
+--primary-hover: #91ff82;
+
+--font-display: "Bebas Neue", sans-serif;
+--font-heading: "Montserrat", sans-serif;
+--font-body: "Inter", sans-serif;
+
+--transition: 0.25s ease;
+
+
+}
+
+/* ========================================
+RESET
+======================================== */
+
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+html,
+body {
+min-height: 100%;
+}
+
+body {
+min-height: 100vh;
+
+background:
+    radial-gradient(
+        circle at 50% 0%,
+        rgba(124, 255, 107, 0.07),
+        transparent 38%
+    ),
+    var(--bg);
+
+color: var(--text);
+
+font-family: var(--font-body);
+
+-webkit-font-smoothing: antialiased;
+
+
+}
+
+a {
+color: inherit;
+text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+font: inherit;
+}
+
+/* ========================================
+PÁGINA
+======================================== */
+
+.series-page {
+min-height: 100vh;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+padding: 40px 20px;
+
+
+}
+
+/* ========================================
+CARD
+======================================== */
+
+.series-card {
+width: 100%;
+max-width: 520px;
+
+padding: 32px;
+
+border: 1px solid var(--border);
+border-radius: 14px;
+
+background:
+    linear-gradient(
+        145deg,
+        rgba(24, 28, 29, 0.96),
+        rgba(17, 20, 21, 0.98)
+    );
+
+box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.45),
+    inset 0 1px rgba(255, 255, 255, 0.02);
+
+
+}
+
+/* ========================================
+VOLTAR
+======================================== */
+
+.back-link {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+
+margin-bottom: 38px;
+
+color: var(--text-muted);
+
+font-size: 10px;
+font-weight: 600;
+
+transition: color var(--transition);
+
+
+}
+
+.back-link:hover {
+color: var(--primary);
+}
+
+.back-link span {
+font-size: 17px;
+}
+
+/* ========================================
+CABEÇALHO
+======================================== */
+
+.series-header {
+margin-bottom: 25px;
+}
+
+.series-header__eyebrow {
+display: block;
+
+margin-bottom: 8px;
+
+color: var(--primary);
+
+font-family: var(--font-heading);
+font-size: 8px;
+font-weight: 800;
+
+letter-spacing: 1.8px;
+
+
+}
+
+.series-header h1 {
+font-family: var(--font-heading);
+font-size: clamp(26px, 5vw, 34px);
+font-weight: 800;
+
+line-height: 1.15;
+
+letter-spacing: -1px;
+
+
+}
+
+.series-header p {
+margin-top: 9px;
+
+color: var(--text-muted);
+
+font-size: 11px;
+line-height: 1.6;
+
+
+}
+
+/* ========================================
+INDICADOR
+======================================== */
+
+.series-indicator {
+display: flex;
+align-items: center;
+gap: 13px;
+
+margin-bottom: 25px;
+padding: 13px;
+
+border: 1px solid rgba(124, 255, 107, 0.12);
+border-radius: 8px;
+
+background: rgba(124, 255, 107, 0.035);
+
+
+}
+
+.series-indicator__icon {
+width: 34px;
+height: 34px;
+
+display: grid;
+place-items: center;
+
+flex-shrink: 0;
+
+border-radius: 7px;
+
+background: var(--primary);
+
+color: #081007;
+
+font-size: 20px;
+font-weight: 600;
+
+
+}
+
+.series-indicator span {
+display: block;
+
+margin-bottom: 3px;
+
+color: var(--primary);
+
+font-size: 7px;
+font-weight: 800;
+
+letter-spacing: 1.2px;
+
+
+}
+
+.series-indicator strong {
+color: var(--text);
+
+font-size: 10px;
+font-weight: 600;
+
+
+}
+
+/* ========================================
+FORMULÁRIO
+======================================== */
+
+.series-form {
+display: flex;
+flex-direction: column;
+gap: 18px;
+}
+
+/*
+O Django {{ form.as_p }} gera:
+
+<p>
+    <label>...</label>
+    <input ...>
+</p>
+
+Por isso estilizamos os <p> diretamente.
+
+
+*/
+
+.series-form p {
+display: flex;
+flex-direction: column;
+gap: 7px;
+}
+
+/* ========================================
+LABELS
+======================================== */
+
+.series-form label {
+color: var(--text);
+
+font-size: 10px;
+font-weight: 600;
+
+
+}
+
+/* ========================================
+INPUTS
+======================================== */
+
+.series-form input,
+.series-form select,
+.series-form textarea {
+width: 100%;
+
+min-height: 46px;
+
+padding: 0 13px;
+
+border: 1px solid var(--border);
+border-radius: 7px;
+
+outline: none;
+
+background: var(--surface-light);
+
+color: var(--text);
+
+font-size: 11px;
+
+transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    background var(--transition);
+
+
+}
+
+.series-form textarea {
+min-height: 100px;
+
+padding: 12px 13px;
+
+resize: vertical;
+
+
+}
+
+.series-form input::placeholder,
+.series-form textarea::placeholder {
+color: #555d5f;
+}
+
+.series-form input:hover,
+.series-form select:hover,
+.series-form textarea:hover {
+border-color: #343b3d;
+}
+
+.series-form input:focus,
+.series-form select:focus,
+.series-form textarea:focus {
+border-color: rgba(124, 255, 107, 0.5);
+
+background: #1a1f20;
+
+box-shadow:
+    0 0 0 3px rgba(124, 255, 107, 0.06);
+
+
+}
+
+/* ========================================
+SELECT
+======================================== */
+
+.series-form select {
+cursor: pointer;
+}
+
+/* ========================================
+HELP TEXT / ERROS
+======================================== */
+
+.series-form .helptext {
+color: var(--text-muted);
+
+font-size: 9px;
+line-height: 1.5;
+
+
+}
+
+.series-form .errorlist {
+order: 3;
+
+padding: 8px 10px;
+
+border: 1px solid rgba(255, 90, 90, 0.2);
+border-radius: 6px;
+
+background: rgba(255, 90, 90, 0.05);
+
+color: #ff8585;
+
+font-size: 9px;
+
+list-style: none;
+
+
+}
+
+.series-form .errorlist li {
+list-style: none;
+}
+
+/* ========================================
+BOTÃO
+======================================== */
+
+.save-button {
+width: 100%;
+height: 48px;
+
+display: flex;
+align-items: center;
+justify-content: space-between;
+
+margin-top: 5px;
+padding: 0 16px;
+
+border: 0;
+border-radius: 7px;
+
+background: var(--primary);
+color: #081007;
+
+cursor: pointer;
+
+font-family: var(--font-heading);
+font-size: 9px;
+font-weight: 800;
+
+text-transform: uppercase;
+letter-spacing: 0.8px;
+
+transition:
+    background var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+
+
+}
+
+.save-button:hover {
+background: var(--primary-hover);
+
+transform: translateY(-2px);
+
+box-shadow:
+    0 10px 30px rgba(124, 255, 107, 0.15);
+
+
+}
+
+.save-button:active {
+transform: translateY(0);
+}
+
+.save-button__arrow {
+font-size: 18px;
+}
+
+/* ========================================
+FOOTER
+======================================== */
+
+.series-footer {
+margin-top: 20px;
+padding-top: 17px;
+
+border-top: 1px solid var(--border);
+
+text-align: center;
+
+
+}
+
+.series-footer span {
+color: #596163;
+
+font-size: 8px;
+
+
+}
+
+/* ========================================
+RESPONSIVO
+======================================== */
+
+@media (max-width: 500px) {
+
+.series-page {
+    align-items: flex-start;
+
+    padding: 20px 12px;
+}
+
+.series-card {
+    padding: 25px 20px;
+
+    border-radius: 12px;
+}
+
+.back-link {
+    margin-bottom: 30px;
+}
+
+.series-header h1 {
+    font-size: 27px;
+}
+
+
+}
